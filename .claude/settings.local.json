@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(New-Item *)",
+      "PowerShell(Get-Content *)",
+      "Bash(mkdir -p ~/.claude/skills)",
+      "Bash(cp \"Q:/study/ai/ExamLoop/ExamLoop.skill\" ~/.claude/skills/examloop.md)",
+      "Bash(python *)",
+      "Bash(pip install *)",
+      "Bash(python3 -c \"import pip; pip.main\\(['install', 'PyPDF2', '-q']\\)\")",
+      "Bash(python3 -m pip install PyPDF2 -q)",
+      "Bash(python3 -c ' *)",
+      "Bash(python3 *)",
+      "Bash(cp templates/base_exam.html outputs/模拟卷_高数.html)",
+      "Bash(rm outputs/data_高数.js)"
+    ]
+  }
+}

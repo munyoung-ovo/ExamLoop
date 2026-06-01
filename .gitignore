@@ -1,0 +1,6 @@
+cop/
+.DS_Store
+*.log
+materials/*
+!materials/.gitkeep
+outputs/*
