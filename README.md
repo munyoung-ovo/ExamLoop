@@ -22,6 +22,16 @@
 
 ---
 
+꒰ᐢ. .ᐢ꒱ **在线试用**
+
+不想先装环境的话，可以直接在 Socialistic 上试资料速通：
+
+[![Try ExamLoop on Socialistic](https://socialistic.ai/api/embed/examloop-exam-cram-419345?lang=zh)](https://socialistic.ai/zh/skill/examloop-exam-cram-419345?utm_source=github&utm_medium=readme&utm_campaign=20260602-college-study-skill-authors&utm_content=badge)
+
+把课件 PPT/PDF 上传进去，就能先看考点和答题模板；每次试用也会留下 session 记录，方便后面根据真实输入继续打磨 ExamLoop。
+
+---
+
 ᐞ･֊･ᐞฅ **快速开始**
 
 ```bash
