@@ -22,17 +22,20 @@
 
 ---
 
-ᐞ･֊･ᐞฅ **快速开始**
+ᐞ･֊･ᐞฅ **安装**
 
 ```bash
-# 1. 点击右上角绿色按钮 Download ZIP，解压后进入文件夹
+# 方式一：npx 一行安装（推荐，网络不稳定可改用方式三）
+npx skills add munyoung-ovo/ExamLoop
 
-# 2. 在文件夹里找到 install.sh，在终端中运行
+# 方式二：git clone 安装（支持 git pull 自动更新）
+git clone https://github.com/munyoung-ovo/ExamLoop.git
+cd ExamLoop
 bash install.sh
 
-# 3. 如有资料，把资料放入 materials/ 文件夹
-
-# 4. 在 outputs/ 文件夹查看生成文件
+# 方式三：下载 ZIP 手动安装
+# 点击右上角绿色按钮 Download ZIP，解压后进入文件夹
+bash install.sh
 ```
 
 ---
@@ -49,6 +52,22 @@ skill examloop
 # 载入后直接说触发词
 速通   出题   解题   出卷
 ```
+
+---
+
+˶ᵔ ᵕ ᵔ˶ **更新**
+
+```bash
+# git clone 安装的用户
+git pull
+
+# ZIP 安装的用户
+bash update.sh
+```
+
+更新后开新对话即可生效。
+
+---
 
 ![资料速通](assets/图3.png)
 ![模拟出卷](assets/图1.png)

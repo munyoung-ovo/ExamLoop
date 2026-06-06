@@ -45,6 +45,12 @@ function safeRender(text) {
 
 function renderExam(data) {
   const typeMap = {choice:'单选题',fill:'填空题',solve:'计算题',essay:'论述题',case:'案例分析题',short:'简答题'};
+  const hasAnswers = data.answers && data.answers.length > 0;
+  const answerMap = {};
+  if (hasAnswers) {
+    data.answers.forEach(a => { answerMap[a.id] = a; });
+    document.title = document.title + ' · 答案解析';
+  }
   const sections = {};
   data.questions.forEach(q => {
     const t = typeMap[q.type] || q.type;
@@ -52,7 +58,8 @@ function renderExam(data) {
     sections[t].push(q);
   });
 
-  let html = `<h1>${data.title}</h1><div class="meta">满分：${data.total_score}分 &nbsp;|&nbsp; 学科：${data.subject}</div>`;
+  const titleSuffix = hasAnswers ? ' · 答案解析' : '';
+  let html = `<h1>${data.title}${titleSuffix}</h1><div class="meta">满分：${data.total_score}分 &nbsp;|&nbsp; 学科：${data.subject}</div>`;
 
   let qIndex = 0;
   for (const [type, qs] of Object.entries(sections)) {
@@ -68,16 +75,11 @@ function renderExam(data) {
         q.options.forEach(o => { html += `<div class="option">${o}</div>`; });
         html += `</div>`;
       }
+      if (hasAnswers && answerMap[q.id]) {
+        html += `<div class="answer-item"><span class="answer-label">答案：</span>${safeRender(String(answerMap[q.id].answer))}</div>`;
+      }
       html += `</div>`;
     });
-  }
-
-  if (data.answers && data.answers.length > 0) {
-    html += `<div class="answer-section"><h2>参考答案</h2>`;
-    data.answers.forEach(a => {
-      html += `<div class="answer-item"><span class="answer-label">第${a.id}题：</span>${safeRender(String(a.answer))}</div>`;
-    });
-    html += `</div>`;
   }
 
   document.getElementById('exam-container').innerHTML = html;
@@ -92,5 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 </script>
+<!-- EXAM_DATA_INJECT -->
+<!-- CONTENT_INJECT -->
 </body>
 </html>
