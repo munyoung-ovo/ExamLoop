@@ -1,5 +1,5 @@
 #!/bin/bash
-REMOTE_URL="https://raw.githubusercontent.com/munyoung-ovo/ExamLoop/main/ExamLoop.skill"
+REMOTE_URL="https://raw.githubusercontent.com/munyoung-ovo/ExamLoop/main/SKILL.md"
 
 LOCAL=$(grep '^version:' ~/.claude/skills/examloop.md 2>/dev/null | cut -d'"' -f2)
 REMOTE=$(curl -fsSL "$REMOTE_URL" | grep '^version:' | cut -d'"' -f2)
