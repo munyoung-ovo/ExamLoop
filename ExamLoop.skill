@@ -1303,6 +1303,109 @@ HTML追加：M2 生成题目完毕后，将题目内容以 HTML 格式追加至 
 - 出卷时只生成题目，不生成答案。答案在用户触发 `[生成答案]` 后单独生成，写入 `outputs/答案_[科目].html`，格式为关键步骤+结论，不写完整推导过程。
 - `templates/base_exam.html` 必须在 `</body>` 前包含 `<!-- EXAM_DATA_INJECT -->` 占位符；Step 4 注入脚本以该占位符为替换目标，**禁止直接替换 `</body>` 标签**。
 - 答案文件复用 `base_exam.html` 模板和 `<!-- EXAM_DATA_INJECT -->` 注入架构，前端通过判断 `window.examData.answers` 是否为空决定渲染模式；禁止为答案文件引入新的占位符或独立模板。
+- **模板自检（执行 Step 1 前必须先执行）**：检查 `templates/base_exam.html` 是否存在，不存在时用 Write 工具创建 `templates/` 目录并写入以下完整内容，不允许跳过或简化：
+
+```html
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>模拟试卷</title>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;max-width:860px;margin:40px auto;padding:20px;line-height:1.8;color:#222}
+h1{text-align:center;font-size:1.6em;border-bottom:2px solid #333;padding-bottom:10px;margin-bottom:6px}
+.meta{text-align:center;color:#555;margin-bottom:30px;font-size:0.95em}
+.section-title{font-size:1.1em;font-weight:bold;margin:28px 0 12px;border-left:4px solid #3498db;padding-left:10px}
+.question{margin-bottom:20px;padding:12px 16px;background:#fafafa;border-radius:6px;border:1px solid #e8e8e8}
+.question-header{font-weight:bold;margin-bottom:6px;color:#333}
+.question-content{margin-bottom:8px}
+.options{margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:4px 20px}
+.option{padding:2px 0}
+.fill-blank{border-bottom:1px solid #333;display:inline-block;min-width:80px}
+.answer-section{page-break-before:always;margin-top:60px;padding-top:30px;border-top:3px double #333}
+.answer-section h2{text-align:center;font-size:1.3em;margin-bottom:20px}
+.answer-item{margin-bottom:10px;padding:8px 12px;background:#f0f7ff;border-radius:4px}
+.answer-label{font-weight:bold;color:#2c3e50;margin-right:8px}
+@media print{
+  .answer-section{page-break-before:always}
+  body{margin:20px}
+}
+</style>
+</head>
+<body>
+<div id="exam-container">加载中…</div>
+<script>
+function safeRender(text) {
+  const blocks = [];
+  text = text.replace(/\\\[[\s\S]*?\\\]/g, m => {
+    blocks.push(m); return '§LATEX' + (blocks.length - 1) + '§';
+  });
+  text = text.replace(/\\\([\s\S]*?\\\)/g, m => {
+    blocks.push(m); return '§LATEX' + (blocks.length - 1) + '§';
+  });
+  text = marked.parse(text);
+  blocks.forEach((b, i) => { text = text.replace('§LATEX' + i + '§', b); });
+  return text;
+}
+
+function renderExam(data) {
+  const typeMap = {choice:'单选题',fill:'填空题',solve:'计算题',essay:'论述题',case:'案例分析题',short:'简答题'};
+  const hasAnswers = data.answers && data.answers.length > 0;
+  const answerMap = {};
+  if (hasAnswers) {
+    data.answers.forEach(a => { answerMap[a.id] = a; });
+    document.title = document.title + ' · 答案解析';
+  }
+  const sections = {};
+  data.questions.forEach(q => {
+    const t = typeMap[q.type] || q.type;
+    if (!sections[t]) sections[t] = [];
+    sections[t].push(q);
+  });
+
+  const titleSuffix = hasAnswers ? ' · 答案解析' : '';
+  let html = `<h1>${data.title}${titleSuffix}</h1><div class="meta">满分：${data.total_score}分 &nbsp;|&nbsp; 学科：${data.subject}</div>`;
+
+  let qIndex = 0;
+  for (const [type, qs] of Object.entries(sections)) {
+    const totalScore = qs.reduce((s, q) => s + q.score, 0);
+    html += `<div class="section-title">${type}（共${qs.length}题，共${totalScore}分）</div>`;
+    qs.forEach(q => {
+      qIndex++;
+      html += `<div class="question">
+        <div class="question-header">第${qIndex}题（${q.score}分）</div>
+        <div class="question-content">${safeRender(q.content)}</div>`;
+      if (q.options) {
+        html += `<div class="options">`;
+        q.options.forEach(o => { html += `<div class="option">${o}</div>`; });
+        html += `</div>`;
+      }
+      if (hasAnswers && answerMap[q.id]) {
+        html += `<div class="answer-item"><span class="answer-label">答案：</span>${safeRender(String(answerMap[q.id].answer))}</div>`;
+      }
+      html += `</div>`;
+    });
+  }
+
+  document.getElementById('exam-container').innerHTML = html;
+  if (window.MathJax) MathJax.typesetPromise();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof window.examData !== 'undefined') {
+    renderExam(window.examData);
+  } else {
+    document.getElementById('exam-container').innerHTML = '数据加载失败，请检查data文件是否正确注入。';
+  }
+});
+</script>
+<!-- EXAM_DATA_INJECT -->
+</body>
+</html>
+```
 
 ### Trigger Phrases
 
