@@ -38,6 +38,21 @@ bash install.sh
 bash install.sh
 ```
 
+**Windows 用户**
+
+`.sh` 文件在 Windows 无法直接双击运行，二选一：
+
+方式一：Git Bash
+```bash
+# 右键项目文件夹 → Git Bash Here，然后输入：
+bash install.sh
+```
+
+方式二：手动安装（不需要 Git Bash）
+1. 打开 `C:\Users\你的用户名\.claude\skills\`（没有就新建）
+2. 把 `ExamLoop.skill` 复制进去，改名为 `examloop.md`
+3. 在项目根目录新建 `materials` 和 `outputs` 文件夹
+
 ---
 
 ʚ˃ ᵕ ˂ɞ **载入 ExamLoop**
