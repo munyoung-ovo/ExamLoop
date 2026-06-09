@@ -25,33 +25,26 @@
 ᐞ･֊･ᐞฅ **安装**
 
 ```bash
-# 方式一：npx 一行安装（推荐，网络不稳定可改用方式三）
+# 方式一：npx 一行安装（推荐）
 npx skills add munyoung-ovo/ExamLoop
 
 # 方式二：git clone 安装（支持 git pull 自动更新）
 git clone https://github.com/munyoung-ovo/ExamLoop.git
 cd ExamLoop
-bash install.sh
+bash install.sh    # 不推荐，优先用方式一
 
 # 方式三：下载 ZIP 手动安装
 # 点击右上角绿色按钮 Download ZIP，解压后进入文件夹
-bash install.sh          【我的建议】！！
+bash install.sh    # 不推荐，优先用方式一
 ```
 
 **Windows 用户**
 
-`.sh` 文件在 Windows 无法直接双击运行，二选一：
+`.sh` 文件在 Windows 无法直接双击运行，建议直接用 npx 方式一。
 
-方式一：Git Bash
-```bash
-# 右键项目文件夹 → Git Bash Here，然后输入：
-bash install.sh
-```
-
-方式二：手动安装（不需要 Git Bash）
+如果必须手动安装：
 1. 打开 `C:\Users\你的用户名\.claude\skills\`（没有就新建）
-2. 把 `ExamLoop.skill` 复制进去，改名为 `examloop.md`
-3. 在项目根目录新建 `materials` 和 `outputs` 文件夹
+2. 把 `SKILL.md` 复制进去，改名为 `examloop.md`
 
 ---
 
