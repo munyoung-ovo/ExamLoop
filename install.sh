@@ -16,3 +16,4 @@ else
 fi
 mkdir -p "$SCRIPT_DIR/materials"
 mkdir -p "$SCRIPT_DIR/outputs"
+read -p "按 Enter 关闭..."
