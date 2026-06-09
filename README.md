@@ -35,7 +35,7 @@ bash install.sh
 
 # 方式三：下载 ZIP 手动安装
 # 点击右上角绿色按钮 Download ZIP，解压后进入文件夹
-bash install.sh
+bash install.sh          【我的建议】！！
 ```
 
 **Windows 用户**
